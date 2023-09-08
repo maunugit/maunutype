@@ -1,0 +1,1 @@
+const words = ['apple', 'banana', 'laptop', 'university', 'compile', 'keyboard', 'station', 'battle', 'water', 'brick', 'cherry', 'grape', 'visual', 'prompt', 'conciousness', 'verbal', 'orange', 'pear', 'pineapple', 'strawberry', 'watermelon', 'kiwi', 'mango', 'blueberry', 'raspberry', 'blackberry', 'peach', 'car'];

@@ -17,6 +17,15 @@
   text-decoration: underline;
 }
 
+.WordsLine {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 .UserInput {
   width: 100%;
   height: 100px;

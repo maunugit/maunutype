@@ -219,6 +219,7 @@ function App() {
     <div className="App">
       <h1>MaunuType</h1>
       <div className="Timer">Time: {timeLeft}s</div>
+      <div className="Instructions">Press tab to restart</div>
       <div className="Words">
   <div className="WordsLine">
     {
@@ -242,7 +243,8 @@ function App() {
 
 </div>
 <div className="UserInputContainer">
-<textarea
+<input
+    type="text"
     ref={textAreaRef}
     className="UserInput"
     // placeholder="Start typing..."
@@ -251,7 +253,7 @@ function App() {
     disabled={timeLeft === 0}
 
 />
-<button onClick={restartTest}>↻</button>
+{/* <button onClick={restartTest}>↻</button> */}
 </div>
 
    {finished && timeLeft === 0 && (   
@@ -274,4 +276,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

@@ -112,6 +112,9 @@ function App() {
   
 
   const handleInputChange = (event) => {
+    if (!started) {
+      startTest();
+    }
     const inputText = event.target.value;
     setUserInput(inputText);
 
@@ -212,16 +215,14 @@ function App() {
 <textarea
     ref={textAreaRef}
     className="UserInput"
-    placeholder="Start typing..."
+    // placeholder="Start typing..."
     value={userInput}
     onChange={handleInputChange}
-    disabled={!started || timeLeft === 0}
+    disabled={timeLeft === 0}
+
 />
 
-      {!started && (
-        <button onClick={startTest}>Start Test</button>
-      )}
-      {finished && (
+      
   <div className="Result">
     Your WPM: {wpm}
     <br />
@@ -231,7 +232,7 @@ function App() {
     <br />
     Accuracy: {accuracy}% 
   </div>
-)}
+
 
 
 

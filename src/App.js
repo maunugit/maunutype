@@ -31,6 +31,8 @@ function App() {
   const [startTime, setStartTime] = useState(0);
   const [correctCharCount, setCorrectCharCount] = useState(0);
   const [typedCharCount, setTypedCharCount] = useState(0); // New state variable to count total characters typed
+  const [accuracy, setAccuracy] = useState(0);
+
 
   //const [currentWord, setCurrentWord] = useState(shuffledWords[currentWordIndex].split("").map(char => ({ char, correct: true })));
   const textAreaRef = useRef(null);
@@ -139,6 +141,9 @@ function App() {
     const wordsEquivalent = correctCharCount / 5;
     const calculatedWPM = Math.floor(wordsEquivalent / timeInMinutes);
 
+    const calculatedAccuracy = (correctCharCount / typedCharCount) * 100;
+    setAccuracy(Math.round(calculatedAccuracy));  // Round to whole number for cleaner display
+
     setWPM(calculatedWPM);
     setFinished(true);
 };
@@ -194,6 +199,8 @@ function App() {
     Correctly typed characters: {correctCharCount}
     <br />
     Incorrectly typed characters: {typedCharCount - correctCharCount}
+    <br />
+    Accuracy: {accuracy}% 
   </div>
 )}
 

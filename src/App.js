@@ -11,7 +11,7 @@ function shuffleArray(array) {
   return shuffledArray;
 }
 
-const words = [
+const words = [ 
   'hello', 'world', 'react', 'javascript', 'typing', 'challenge',
   'developer', 'programming', 'database', 'computer', 'keyboard', 'speed',
   'green', 'operator', 'complete', 'structure', 'brains', 'tree', 'bright', 'brainstorm', 'insight',
@@ -76,9 +76,10 @@ function App() {
 
 
   useEffect(() => {
-    if (started) {
+  
     textAreaRef.current.focus();
-  }
+
+  
     if (started && timeLeft > 0) {
       
       const timer = setTimeout(() => {
@@ -98,17 +99,46 @@ function App() {
     setStarted(true);
     setStartTime(Date.now());
     setCurrentWordIndex(0);
-  
     setCurrentWord(shuffledWords[0].split("").map(char => ({ char, correct: true })));
-
     setCorrectCharCount(0);
     setTypedCharCount(0);
-  
     textAreaRef.current.focus();
+  };
 
+  const restartTest = () => {
+    setStarted(false); // Test will be marked as not started
+    setCurrentWordIndex(0); // Start from the first word
+    setUserInput(''); // Clear user input
+    setTimeLeft(20); // Reset the timer
+    setWPM(0); // Reset Words Per Minute
+    setFinished(false); // Mark test as not finished
+    setCorrectCharCount(0); // Reset the count of correctly typed characters
+    setTypedCharCount(0); // Reset the count of total typed characters
+    setAccuracy(0); // Reset accuracy
+    setCurrentLine(0); // Reset the current line
+    // Optionally shuffle the words again if you want a new sequence on each restart
+    const newShuffledWords = shuffleArray(words);
+    setShuffledWords(newShuffledWords);
+    setCurrentWord(newShuffledWords[0].split("").map(char => ({ char, correct: true })));
   };
   
   
+  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();  // Prevent the default behavior
+      restartTest();          // Restart the test
+    }
+  };
+  
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+  
+    // Cleanup: remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
   
 
   const handleInputChange = (event) => {
@@ -211,7 +241,7 @@ function App() {
 
 
 </div>
-
+<div className="UserInputContainer">
 <textarea
     ref={textAreaRef}
     className="UserInput"
@@ -221,8 +251,10 @@ function App() {
     disabled={timeLeft === 0}
 
 />
+<button onClick={restartTest}>↻</button>
+</div>
 
-      
+   {finished && timeLeft === 0 && (   
   <div className="Result">
     Your WPM: {wpm}
     <br />
@@ -232,12 +264,13 @@ function App() {
     <br />
     Accuracy: {accuracy}% 
   </div>
+   )}
 
 
 
 
 
-    </div>
+   </div>
   );
 }
 

@@ -13,8 +13,9 @@ function shuffleArray(array) {
 
 const words = [
   'hello', 'world', 'react', 'javascript', 'typing', 'challenge',
-  'developer', 'programming', 'openai', 'computer', 'keyboard', 'speed',
-  'green', 'operator', 'complete', 'structure', 'brains', 'tree', 'bright', 'brainstorm','insight'
+  'developer', 'programming', 'database', 'computer', 'keyboard', 'speed',
+  'green', 'operator', 'complete', 'structure', 'brains', 'tree', 'bright', 'brainstorm', 'insight'
+  'probability', 'falsehood', 'cover', 'yellow', 'biomedical', 'before', 'constant'
 ];
 
 

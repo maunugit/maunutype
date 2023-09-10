@@ -1,16 +1,20 @@
 .App {
   text-align: center;
-  padding: 20px;
+  padding: 38px;
+  display: flex;           
+  flex-direction: column;  
+  align-items: center;     
+  width: 100%;             
 }
 
 .Timer {
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 26px;
+  margin-bottom: 19px;
 }
 
 .Words {
-  font-size: 18px;
-  margin: 20px 0;
+  font-size: 22px;
+  margin: 38px 0;
 }
 
 .CurrentWord {
@@ -26,25 +30,43 @@
 }
 
 
+
+.UserInputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  gap: 13px;
+  width: 100%;             
+}
+
 .UserInput {
-  width: 100%;
-  height: 100px;
-  font-size: 16px;
-  padding: 10px;
-  margin-bottom: 20px;
+  width: 15%;
+  height: 20px;
+  font-size: 18px;
+  padding: 14px;
+  margin: 0; 
   resize: none;
+  box-sizing: border-box; 
 }
 
 button {
-  font-size: 16px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+  font-size: 23px;
+  padding: 15px 25px;
+  background-color: #fff700;
+  color: rgb(0, 0, 0);
   border: none;
   cursor: pointer;
+  margin: 0; 
+  line-height: 1; 
+  vertical-align: middle; 
+  box-sizing: border-box; 
 }
 
 .Result {
-  font-size: 24px;
-  margin-top: 20px;
+  font-size: 26px;
+  margin-top: 36px;
+}
+
+body {
+  overflow-x: hidden;
 }

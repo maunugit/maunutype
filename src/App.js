@@ -36,10 +36,31 @@ function App() {
   const [typedCharCount, setTypedCharCount] = useState(0); // New state variable to count total characters typed
   const [accuracy, setAccuracy] = useState(0);
 
+  const [currentLine, setCurrentLine] = useState(0); // this will track the current line.
 
   //const [currentWord, setCurrentWord] = useState(shuffledWords[currentWordIndex].split("").map(char => ({ char, correct: true })));
   const textAreaRef = useRef(null);
   const [shuffledWords, setShuffledWords] = useState(shuffleArray(words));
+  const renderWord = (word, adjustedIndex) => (
+    <React.Fragment key={adjustedIndex}>
+      <span className={adjustedIndex === currentWordIndex ? 'CurrentWord' : ''}>
+        {adjustedIndex === currentWordIndex ? (
+          currentWord.map((letterObj, charIndex) => (
+            <span
+              key={charIndex}
+              style={{ color: letterObj.correct ? 'inherit' : 'red' }}
+            >
+              {letterObj.char}
+            </span>
+          ))
+        ) : (
+          word
+        )}
+      </span>
+      {adjustedIndex < (currentLine + 2) * 10 - 1 && ' '}
+    </React.Fragment>
+  );
+  
 
 
   
@@ -121,11 +142,16 @@ function App() {
         if (currentWordIndex < shuffledWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
             setCurrentWord(
+              
                 shuffledWords[currentWordIndex + 1].split("").map(char => ({
                     char,
                     correct: true
                 }))
             ); // Set the next word
+            if ((currentWordIndex + 1) % 10 === 0) {
+              setCurrentLine(currentLine + 1);
+            }
+            
             setUserInput('');
         } else {
             setFinished(true);
@@ -161,25 +187,25 @@ function App() {
       <h1>MaunuType</h1>
       <div className="Timer">Time: {timeLeft}s</div>
       <div className="Words">
-      {shuffledWords.map((word, index) => (
-  <React.Fragment key={index}>
-    <span className={index === currentWordIndex ? 'CurrentWord' : ''}>
-      {index === currentWordIndex ? (
-        currentWord.map((letterObj, charIndex) => (
-          <span
-            key={charIndex}
-            style={{ color: letterObj.correct ? 'inherit' : 'red' }}
-          >
-            {letterObj.char}
-          </span>
-        ))
-      ) : (
-        word
-      )}
-    </span>
-    {index < shuffledWords.length - 1 && ' '}
-  </React.Fragment>
-))}
+  <div className="WordsLine">
+    {
+      shuffledWords.slice(currentLine * 10, (currentLine * 10) + 10).map((word, index) => {
+        const adjustedIndex = currentLine * 10 + index;
+        return renderWord(word, adjustedIndex);
+      })
+    }
+  </div>
+  <div className="WordsLine">
+    {
+      shuffledWords.slice((currentLine + 1) * 10, (currentLine + 1) * 10 + 10).map((word, index) => {
+        const adjustedIndex = (currentLine + 1) * 10 + index;
+        return renderWord(word, adjustedIndex);
+      })
+    }
+  </div>
+      
+    
+
 
 </div>
 

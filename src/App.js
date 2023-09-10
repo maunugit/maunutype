@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import './App.css';
+import { Line } from 'react-chartjs-2';
+
 
 function shuffleArray(array) {
   const shuffledArray = array.slice(); // to avoid mutating the original array
@@ -24,6 +26,7 @@ const words = [
 
 function App() {
   const [currentWord, setCurrentWord] = useState([]);
+  const [wpmData, setWpmData] = useState([]);
 
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
@@ -46,10 +49,8 @@ function App() {
       <span className={adjustedIndex === currentWordIndex ? 'CurrentWord' : ''}>
         {adjustedIndex === currentWordIndex ? (
           currentWord.map((letterObj, charIndex) => (
-            <span
-              key={charIndex}
-              style={{ color: letterObj.correct ? 'inherit' : 'red' }}
-            >
+            <span key={charIndex} className={letterObj.correct ? '' : 'incorrect'}>
+
               {letterObj.char}
             </span>
           ))
@@ -219,7 +220,7 @@ function App() {
     <div className="App">
       <h1>MaunuType</h1>
       <div className="Timer">Time: {timeLeft}s</div>
-      <div className="Instructions">Press tab to restart</div>
+      <div className="Instructions">You can also press tab to restart</div>
       <div className="Words">
   <div className="WordsLine">
     {
@@ -253,7 +254,7 @@ function App() {
     disabled={timeLeft === 0}
 
 />
-{/* <button onClick={restartTest}>↻</button> */}
+{ <button onClick={restartTest}>↻</button> }
 </div>
 
    {finished && timeLeft === 0 && (   

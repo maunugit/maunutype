@@ -6,13 +6,19 @@
   align-items: center;     
   width: 100%;             
 }
+
+.Title {
+  font-size: 12px;;
+}
 .incorrect {
   color: red;
 }
-.Timer {
+
+.TimerDisplay {
   font-size: 22px;
-  margin-bottom: 19px;
+  margin: 10px 0;
 }
+
 
 .Words {
   font-size: 20px;

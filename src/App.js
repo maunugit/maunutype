@@ -5,7 +5,7 @@ import './App.css';
 import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM'; // Import WPm calculation from CalculateWPM.js
 import words from './Words'; // Import words from Words.js
 import Results from './Results';
-// import Timer from './Timer.js';
+import Timer from './Timer.js';
 
 
 function App() {
@@ -23,10 +23,14 @@ function App() {
   const [typedCharCount, setTypedCharCount] = useState(0); // New state variable to count total characters typed
   const [accuracy, setAccuracy] = useState(0);
 
+  const timerRef = useRef(null);
+  const inputRef = useRef(null);
+
+
   const [currentLine, setCurrentLine] = useState(0); // this will track the current line.
 
   //const [currentWord, setCurrentWord] = useState(shuffledWords[currentWordIndex].split("").map(char => ({ char, correct: true })));
-  const textAreaRef = useRef(null);
+  
   const [shuffledWords, setShuffledWords] = useState(shuffleArray(words));
   const renderWord = (word, adjustedIndex) => (
     <React.Fragment key={adjustedIndex}>
@@ -48,15 +52,28 @@ function App() {
 
   const startTest = () => {
     setStarted(true);
+    timerRef.current && timerRef.current.start(); // Start the timer
     setStartTime(Date.now());
     setCurrentWordIndex(0);
     setCurrentWord(shuffledWords[0].split("").map(char => ({ char, correct: true })));
     setCorrectCharCount(0);
     setTypedCharCount(0);
-    textAreaRef.current.focus();
+    
+  };
+
+ 
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();  // Prevent the default behavior
+      restartTest();          // Restart the test
+    }
   };
 
   const restartTest = () => {
+    timerRef.current.restart(); // New timer reset
+    inputRef.current.focus(); // Make sure the input field is ready for typing automatically
+    setTypingData([]); // Reset the typing data
     setStarted(false); // Test will be marked as not started
     setCurrentWordIndex(0); // Start from the first word
     setUserInput(''); // Clear user input
@@ -72,13 +89,6 @@ function App() {
     setShuffledWords(newShuffledWords);
     setCurrentWord(newShuffledWords[0].split("").map(char => ({ char, correct: true })));
   };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();  // Prevent the default behavior
-      restartTest();          // Restart the test
-    }
-  };
   
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -93,9 +103,12 @@ function App() {
   const handleInputChange = (event) => {
     if (!started) {
       startTest();
+      timerRef.current.start();
+      
     }
     const inputText = event.target.value;
     setUserInput(inputText);
+    
 
     let correctCharsInCurrentInput = 0;
     
@@ -151,8 +164,11 @@ const renderLine = (lineNum) => (
     }
   </div>
 );
-
-
+useEffect(() => {
+  // This will set the focus to the input field when the component mounts
+  inputRef.current.focus();
+}, []);
+// console.log("Time Left:", timeLeft, "Seconds:", elapsedSeconds, "WPM:", currentWpm);
 useEffect(() => {
   const newShuffledWords = shuffleArray(words);
   setShuffledWords(newShuffledWords);
@@ -171,36 +187,25 @@ useEffect(() => {
   }
 }, [timeLeft]);
 
-useEffect(() => {
-  
-  if (started && timeLeft > 0) {
-    const timer = setTimeout(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }
-}, [started, timeLeft]);
-
-useEffect(() => {
-  if (started && !finished) {
-    const interval = setInterval(() => {
-      const elapsedSeconds = 15 - timeLeft + 1; 
-      const currentWpm = calculateWPM(startTime, correctCharCount);
-
-      // console.log("Seconds: " + elapsedSeconds + " WPM: ",currentWpm);
-      // console.log("Time Left:", timeLeft, "Seconds:", elapsedSeconds, "WPM:", currentWpm);
-
-
-      setTypingData(prevData => [...prevData, { seconds: elapsedSeconds, wpm: currentWpm }]);
-    }, 1000);
-    return () => clearInterval(interval);
-  }
-}, [started, finished, timeLeft, startTime, correctCharCount]);
-
   return (
     <div className="App">
+      <div className="Title">
       <h1>MaunuType</h1>
-      <div className="Timer">time: {timeLeft}s</div>
+      </div>
+      <Timer 
+        duration={15}
+        ref={timerRef}
+        onTimeUpdate={(elapsedTime) => {
+          const currentWpm = calculateWPM(startTime, correctCharCount);
+          console.log("Elapsed Time:", elapsedTime, "WPM:", currentWpm);
+          setTypingData(prevData => [...prevData, { seconds: elapsedTime, wpm: currentWpm }]);
+        }}
+        onTimeEnd={() => {
+          setTimeLeft(0);
+          setFinished(true);
+  }}
+/>
+      
       <div className="Instructions">press tab to restart</div>
       <div className="Words">
         {renderLine(currentLine)}
@@ -210,14 +215,14 @@ useEffect(() => {
 <div className="UserInputContainer">
 <input
     type="text"
-    ref={textAreaRef}
     className="UserInput"
+    ref={inputRef}
     // placeholder="Start typing..."
     value={userInput}
     onChange={handleInputChange}
     disabled={timeLeft === 0}
-
 />
+
 { <button onClick={restartTest}>↻</button> }
 </div>
 

@@ -24,28 +24,7 @@
 .WordsLine {
   display: block;
   width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.incorrect {
-  color: red;
-}
-
-
-
-.UserInputContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;  
-  gap: 13px;
-  width: 100%;             
-}
-
-
-.UserInput {
-  width: 200px; /* You can adjust this to your preference */
+  height: 100px;
   font-size: 16px;
   padding: 10px;
   margin-bottom: 20px;
@@ -53,6 +32,7 @@
 }
 
 
+/*
 button {
   font-size: 23px;
   padding: 15px 25px;
@@ -66,10 +46,9 @@ button {
   box-sizing: border-box; 
 }
 
-
 .Result {
-  font-size: 26px;
-  margin-top: 36px;
+  font-size: 24px;
+  margin-top: 20px;
 }
 
 body {

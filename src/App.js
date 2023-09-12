@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import './App.css';
-import Results from './Results';
-import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM';
+import { Line } from 'react-chartjs-2';
 
 
-// import { Line } from 'react-chartjs-2';
+function shuffleArray(array) {
+  const shuffledArray = array.slice(); // to avoid mutating the original array
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // swap elements
+  }
+  return shuffledArray;
+}
 
 const words = [ 
   'hello', 'world', 'react', 'javascript', 'typing', 'challenge',
@@ -20,7 +26,7 @@ const words = [
 
 function App() {
   const [currentWord, setCurrentWord] = useState([]);
-  // const [wpmData, setWpmData] = useState([]);
+  const [wpmData, setWpmData] = useState([]);
 
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
@@ -56,6 +62,8 @@ function App() {
     </React.Fragment>
   );
   
+
+
   
 
 
@@ -185,15 +193,23 @@ function App() {
     }
 };
 
-useEffect(() => {
-  if (timeLeft === 0) {
-    const wpm = calculateWPM(startTime, correctCharCount);
-    const accuracy = calculateAccuracy(correctCharCount, typedCharCount);
-    setWPM(wpm);
-    setAccuracy(accuracy);
+  
+  
+  
+  const calculateWPM = () => {
+    const currentTime = Date.now();
+    const timeInSeconds = (currentTime - startTime) / 1000;
+    const timeInMinutes = timeInSeconds / 60;
+
+    const wordsEquivalent = correctCharCount / 5;
+    const calculatedWPM = Math.floor(wordsEquivalent / timeInMinutes);
+
+    const calculatedAccuracy = (correctCharCount / typedCharCount) * 100;
+    setAccuracy(Math.round(calculatedAccuracy));  // Round to whole number for cleaner display
+
+    setWPM(calculatedWPM);
     setFinished(true);
-  }
-}, [started, timeLeft]);
+};
 
   
   
@@ -250,9 +266,6 @@ useEffect(() => {
     Incorrectly typed characters: {typedCharCount - correctCharCount}
     <br />
     Accuracy: {accuracy}% 
-    {/* <Results /> */}
-  
-    
   </div>
    )}
 

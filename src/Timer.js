@@ -1,32 +1,43 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = ({ initialTime, onTimeUp }) => {
-  const [remainingTime, setRemainingTime] = useState(initialTime);
-  
+function Timer({ duration, onTimeUpdate, onTimeEnd }) {
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
-    if (remainingTime > 0) {
-      const timer = setInterval(() => {
-        setRemainingTime(prevTime => prevTime - 1);
+    if (startTime !== null) {
+      const interval = setInterval(() => {
+        const now = new Date();
+        const timeDiff = Math.floor((now - startTime) / 1000); // Time difference in seconds
+        setElapsedTime(timeDiff);
+
+        if (onTimeUpdate) {
+          onTimeUpdate(timeDiff);
+        }
+
+        if (timeDiff >= duration) {
+          clearInterval(interval);
+          if (onTimeEnd) {
+            onTimeEnd();
+          }
+        }
       }, 1000);
 
-      return () => {
-        clearInterval(timer);
-      };
-    } else if (remainingTime === 0) {
-      onTimeUp();
+      return () => clearInterval(interval);
     }
-  }, [remainingTime, onTimeUp]);
+  }, [startTime]);
 
+  const startTimer = () => {
+    setStartTime(new Date());
+  };
 
   return (
-    <div className="timer">
-      
-        {remainingTime > 0 ? `Time remaining: ${remainingTime} seconds` : ''}
-      
+    <div>
+      Time left: {duration - elapsedTime}s
+      <button onClick={startTimer}>Start</button>
     </div>
   );
-};
+}
 
 export default Timer;
 

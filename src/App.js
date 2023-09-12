@@ -5,6 +5,7 @@ import './App.css';
 import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM'; // Import WPm calculation from CalculateWPM.js
 import words from './Words'; // Import words from Words.js
 import Results from './Results';
+// import Timer from './Timer.js';
 
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
   const [typingData, setTypingData] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [started, setStarted] = useState(false);
   const [wpm, setWPM] = useState(0);
   const [finished, setFinished] = useState(false);
@@ -59,7 +60,7 @@ function App() {
     setStarted(false); // Test will be marked as not started
     setCurrentWordIndex(0); // Start from the first word
     setUserInput(''); // Clear user input
-    setTimeLeft(20); // Reset the timer
+    setTimeLeft(15); // Reset the timer
     setWPM(0); // Reset Words Per Minute
     setFinished(false); // Mark test as not finished
     setCorrectCharCount(0); // Reset the count of correctly typed characters
@@ -183,20 +184,24 @@ useEffect(() => {
 useEffect(() => {
   if (started && !finished) {
     const interval = setInterval(() => {
-      const elapsedSeconds = 20 - timeLeft; // Assuming a 20-second timer based on your initial state
+      const elapsedSeconds = 15 - timeLeft + 1; 
       const currentWpm = calculateWPM(startTime, correctCharCount);
+
+      // console.log("Seconds: " + elapsedSeconds + " WPM: ",currentWpm);
+      // console.log("Time Left:", timeLeft, "Seconds:", elapsedSeconds, "WPM:", currentWpm);
+
+
       setTypingData(prevData => [...prevData, { seconds: elapsedSeconds, wpm: currentWpm }]);
     }, 1000);
     return () => clearInterval(interval);
   }
 }, [started, finished, timeLeft, startTime, correctCharCount]);
 
-
   return (
     <div className="App">
       <h1>MaunuType</h1>
-      <div className="Timer">Time: {timeLeft}s</div>
-      <div className="Instructions">You can also press tab to restart</div>
+      <div className="Timer">time: {timeLeft}s</div>
+      <div className="Instructions">press tab to restart</div>
       <div className="Words">
         {renderLine(currentLine)}
         {renderLine(currentLine + 1)}
@@ -218,15 +223,14 @@ useEffect(() => {
 
    {finished && timeLeft === 0 && (   
   <div className="Result">
-    Your WPM: {wpm}
     <br />
-    Correctly typed characters: {correctCharCount}
-    <br />
-    Incorrectly typed characters: {typedCharCount - correctCharCount}
-    <br />
-    Accuracy: {accuracy}% 
-    <br />
-    <Results typingData={typingData} />
+    <Results 
+        typingData={typingData} 
+        wpm={wpm}
+        correctCharCount={correctCharCount}
+        incorrectCharCount={typedCharCount - correctCharCount}
+        accuracy={accuracy}   
+        />
   </div>
    )}
    </div>

@@ -10,12 +10,12 @@
   color: red;
 }
 .Timer {
-  font-size: 26px;
+  font-size: 22px;
   margin-bottom: 19px;
 }
 
 .Words {
-  font-size: 22px;
+  font-size: 20px;
   margin: 38px 0;
 }
 
@@ -72,4 +72,19 @@ button {
 
 body {
   overflow-x: hidden;
+}
+.results-container {
+  font-size: 50%;
+  display: flex; /* Make it a flex container */
+  justify-content: space-between; /* Add space between child items */
+}
+
+.user-typing-results {
+  width: 10%; /* Takes up 45% of the parent container's width */
+  /* ... any other styling for the results ... */
+}
+
+.wpm-chart-container {
+  width: 90%; /* Takes up 50% of the parent container's width */
+  /* ... any other styling for the graph ... */
 }

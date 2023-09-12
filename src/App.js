@@ -207,8 +207,9 @@ useEffect(() => {
     disabled={timeLeft === 0}
     />
 
-    { <button onClick={restartTest}>↻</button> }
+    
   </div>
+  {/* { <button onClick={restartTest}>↻</button> } */}
 
   {finished && timeLeft === 0 && (   
   <div className="Result">

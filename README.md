@@ -1,5 +1,5 @@
 # MaunuType
-A React-based typing test application
+A React-based minimalistic typing test application
 
 
 # Getting Started with Create React App

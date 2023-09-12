@@ -6,7 +6,9 @@
   align-items: center;     
   width: 100%;             
 }
-
+.incorrect {
+  color: red;
+}
 .Timer {
   font-size: 26px;
   margin-bottom: 19px;

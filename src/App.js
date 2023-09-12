@@ -2,24 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import './App.css';
 // import { Line } from 'react-chartjs-2';
-import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM';
-
-
-const words = [ 
-  'hello', 'world', 'react', 'javascript', 'typing', 'challenge',
-  'developer', 'programming', 'database', 'computer', 'keyboard', 'speed',
-  'green', 'operator', 'complete', 'structure', 'brains', 'tree', 'bright', 'brainstorm', 'insight',
-  'probability', 'falsehood', 'cover', 'yellow', 'biomedical', 'before', 'constant', 'provide', 'impossible',
-  'gradual', 'push', 'internet', 'accuracy', 'timeless', 'distribution', 'firm', 'intelligence', 'but',
-  'leftovers', 'tribal', 'mouse', 'graphic', 'processor', 'given', 'amount', 'sight'
-];
-
+import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM'; // Import WPm calculation from CalculateWPM.js
+import words from './Words'; // Import words from Words.js
+import Results from './Results';
 
 
 function App() {
   const [currentWord, setCurrentWord] = useState([]);
   // const [wpmData, setWpmData] = useState([]);
-
+  const [typingData, setTypingData] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [timeLeft, setTimeLeft] = useState(20);
@@ -53,40 +44,6 @@ function App() {
       {adjustedIndex < (currentLine + 2) * 10 - 1 && ' '}
     </React.Fragment>
   );
-  
-
-
-  
-
-
-  useEffect(() => {
-    const newShuffledWords = shuffleArray(words);
-    setShuffledWords(newShuffledWords);
-    setCurrentWord(newShuffledWords[0].split("").map(char => ({ char, correct: true })));
-}, []);
-
-
-
-
-  useEffect(() => {
-  
-    textAreaRef.current.focus();
-
-  
-    if (started && timeLeft > 0) {
-      
-      const timer = setTimeout(() => {
-        setTimeLeft(timeLeft - 1);
-      }, 1000);
-  
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0) {
-      calculateWPM();
-    }
-  }, [started, timeLeft]);
-  
-  
-  
 
   const startTest = () => {
     setStarted(true);
@@ -114,9 +71,7 @@ function App() {
     setShuffledWords(newShuffledWords);
     setCurrentWord(newShuffledWords[0].split("").map(char => ({ char, correct: true })));
   };
-  
-  
-  
+
   const handleKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault();  // Prevent the default behavior
@@ -185,20 +140,57 @@ function App() {
     }
 };
 
-  
+const renderLine = (lineNum) => (
+  <div className="WordsLine">
+    {
+      shuffledWords.slice(lineNum * 10, lineNum * 10 + 10).map((word, index) => {
+        const adjustedIndex = lineNum * 10 + index;
+        return renderWord(word, adjustedIndex);
+      })
+    }
+  </div>
+);
+
+
+useEffect(() => {
+  const newShuffledWords = shuffleArray(words);
+  setShuffledWords(newShuffledWords);
+  setCurrentWord(newShuffledWords[0].split("").map(char => ({ char, correct: true })));
+}, []);
+
+
 useEffect(() => {
   if (timeLeft === 0) {
-    const wpm = calculateWPM(startTime, correctCharCount);
-    const accuracy = calculateAccuracy(correctCharCount, typedCharCount);
-    setWPM(wpm);
-    setAccuracy(accuracy);
+    const newWPM = calculateWPM(startTime, correctCharCount);
+    const accuracyValue = calculateAccuracy(correctCharCount, typedCharCount);
+    
+    setWPM(newWPM);
+    setAccuracy(accuracyValue);
     setFinished(true);
   }
+}, [timeLeft]);
+
+useEffect(() => {
+  
+  if (started && timeLeft > 0) {
+    const timer = setTimeout(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }
 }, [started, timeLeft]);
-  
-  
-  
-  
+
+useEffect(() => {
+  if (started && !finished) {
+    const interval = setInterval(() => {
+      const elapsedSeconds = 20 - timeLeft; // Assuming a 20-second timer based on your initial state
+      const currentWpm = calculateWPM(startTime, correctCharCount);
+      setTypingData(prevData => [...prevData, { seconds: elapsedSeconds, wpm: currentWpm }]);
+    }, 1000);
+    return () => clearInterval(interval);
+  }
+}, [started, finished, timeLeft, startTime, correctCharCount]);
+
 
   return (
     <div className="App">
@@ -206,27 +198,10 @@ useEffect(() => {
       <div className="Timer">Time: {timeLeft}s</div>
       <div className="Instructions">You can also press tab to restart</div>
       <div className="Words">
-  <div className="WordsLine">
-    {
-      shuffledWords.slice(currentLine * 10, (currentLine * 10) + 10).map((word, index) => {
-        const adjustedIndex = currentLine * 10 + index;
-        return renderWord(word, adjustedIndex);
-      })
-    }
-  </div>
-  <div className="WordsLine">
-    {
-      shuffledWords.slice((currentLine + 1) * 10, (currentLine + 1) * 10 + 10).map((word, index) => {
-        const adjustedIndex = (currentLine + 1) * 10 + index;
-        return renderWord(word, adjustedIndex);
-      })
-    }
-  </div>
-      
-    
+        {renderLine(currentLine)}
+        {renderLine(currentLine + 1)}
+    </div>
 
-
-</div>
 <div className="UserInputContainer">
 <input
     type="text"
@@ -250,15 +225,11 @@ useEffect(() => {
     Incorrectly typed characters: {typedCharCount - correctCharCount}
     <br />
     Accuracy: {accuracy}% 
+    <br />
+    {/* <Results typingData={typingData} /> */}
   </div>
    )}
-
-
-
-
-
    </div>
   );
 }
-
 export default App; 

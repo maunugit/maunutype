@@ -5,7 +5,7 @@ const Results = ( {typingData}) => {
 
   return (
     <div>
-      <h2>User Typing Results</h2>
+      <h2>WPM visualized</h2>
       <WpmChart data={typingData} />
     </div>
   );

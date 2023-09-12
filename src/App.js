@@ -226,7 +226,7 @@ useEffect(() => {
     <br />
     Accuracy: {accuracy}% 
     <br />
-    {/* <Results typingData={typingData} /> */}
+    <Results typingData={typingData} />
   </div>
    )}
    </div>

@@ -49,11 +49,11 @@
 
 
 .UserInput {
-  width: 200px; /* You can adjust this to your preference */
+  width: 200px; 
   font-size: 16px;
   padding: 10px;
   margin-bottom: 20px;
-  border: 1px solid #ccc; /* Add a border so it's visible */
+  border: 1px solid #ccc; 
 }
 
 
@@ -81,16 +81,14 @@ body {
 }
 .results-container {
   font-size: 50%;
-  display: flex; /* Make it a flex container */
-  justify-content: space-between; /* Add space between child items */
+  display: flex; 
+  justify-content: space-between; 
 }
 
 .user-typing-results {
-  width: 10%; /* Takes up 45% of the parent container's width */
-  /* ... any other styling for the results ... */
+  width: 10%; 
 }
 
 .wpm-chart-container {
-  width: 90%; /* Takes up 50% of the parent container's width */
-  /* ... any other styling for the graph ... */
+  width: 90%;
 }

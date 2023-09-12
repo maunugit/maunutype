@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import './App.css';
-// import { Line } from 'react-chartjs-2';
-import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM'; // Import WPm calculation from CalculateWPM.js
-import words from './Words'; // Import words from Words.js
+
+import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM';
+import words from './Words'; 
 import Results from './Results';
 import Timer from './Timer.js';
 
-
 function App() {
   const [currentWord, setCurrentWord] = useState([]);
-  // const [wpmData, setWpmData] = useState([]);
   const [typingData, setTypingData] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
@@ -22,14 +20,9 @@ function App() {
   const [correctCharCount, setCorrectCharCount] = useState(0);
   const [typedCharCount, setTypedCharCount] = useState(0); // New state variable to count total characters typed
   const [accuracy, setAccuracy] = useState(0);
-
   const timerRef = useRef(null);
-  const inputRef = useRef(null);
-
-
+  const inputRef = useRef(null)
   const [currentLine, setCurrentLine] = useState(0); // this will track the current line.
-
-  //const [currentWord, setCurrentWord] = useState(shuffledWords[currentWordIndex].split("").map(char => ({ char, correct: true })));
   
   const [shuffledWords, setShuffledWords] = useState(shuffleArray(words));
   const renderWord = (word, adjustedIndex) => (
@@ -38,7 +31,6 @@ function App() {
         {adjustedIndex === currentWordIndex ? (
           currentWord.map((letterObj, charIndex) => (
             <span key={charIndex} className={letterObj.correct ? '' : 'incorrect'}>
-
               {letterObj.char}
             </span>
           ))
@@ -58,10 +50,7 @@ function App() {
     setCurrentWord(shuffledWords[0].split("").map(char => ({ char, correct: true })));
     setCorrectCharCount(0);
     setTypedCharCount(0);
-    
   };
-
- 
 
   const handleKeyDown = (event) => {
     if (event.key === 'Tab') {
@@ -92,8 +81,6 @@ function App() {
   
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
-  
-    // Cleanup: remove the event listener when the component unmounts
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -104,12 +91,10 @@ function App() {
     if (!started) {
       startTest();
       timerRef.current.start();
-      
     }
     const inputText = event.target.value;
     setUserInput(inputText);
-    
-
+  
     let correctCharsInCurrentInput = 0;
     
     const updatedCurrentWord = currentWord.map((letterObj, index) => {
@@ -146,7 +131,6 @@ function App() {
             if ((currentWordIndex + 1) % 10 === 0) {
               setCurrentLine(currentLine + 1);
             }
-            
             setUserInput('');
         } else {
             setFinished(true);
@@ -168,7 +152,7 @@ useEffect(() => {
   // This will set the focus to the input field when the component mounts
   inputRef.current.focus();
 }, []);
-// console.log("Time Left:", timeLeft, "Seconds:", elapsedSeconds, "WPM:", currentWpm);
+
 useEffect(() => {
   const newShuffledWords = shuffleArray(words);
   setShuffledWords(newShuffledWords);
@@ -212,8 +196,8 @@ useEffect(() => {
         {renderLine(currentLine + 1)}
     </div>
 
-<div className="UserInputContainer">
-<input
+  <div className="UserInputContainer">
+    <input
     type="text"
     className="UserInput"
     ref={inputRef}
@@ -221,12 +205,12 @@ useEffect(() => {
     value={userInput}
     onChange={handleInputChange}
     disabled={timeLeft === 0}
-/>
+    />
 
-{ <button onClick={restartTest}>↻</button> }
-</div>
+    { <button onClick={restartTest}>↻</button> }
+  </div>
 
-   {finished && timeLeft === 0 && (   
+  {finished && timeLeft === 0 && (   
   <div className="Result">
     <br />
     <Results 
@@ -238,7 +222,7 @@ useEffect(() => {
         />
   </div>
    )}
-   </div>
+</div>
   );
 }
 export default App; 

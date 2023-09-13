@@ -11,6 +11,9 @@ function App() {
   const [currentWord, setCurrentWord] = useState([]);
   const [typingData, setTypingData] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
+
+  const [wordsWithLetterStates, setWordsWithLetterStates] = useState([]);
+  
   const [userInput, setUserInput] = useState('');
   const [timeLeft, setTimeLeft] = useState(15);
   const [started, setStarted] = useState(false);
@@ -25,6 +28,8 @@ function App() {
   const [currentLine, setCurrentLine] = useState(0); // this will track the current line.
   
   const [shuffledWords, setShuffledWords] = useState(shuffleArray(words));
+
+
   const renderWord = (word, adjustedIndex) => (
     <React.Fragment key={adjustedIndex}>
       <span className={adjustedIndex === currentWordIndex ? 'CurrentWord' : ''}>
@@ -35,13 +40,19 @@ function App() {
             </span>
           ))
         ) : (
-          word
+          wordsWithLetterStates[adjustedIndex]?.map((letterObj, charIndex) => (
+            <span key={charIndex} className={letterObj.correct ? '' : 'incorrect'}>
+              {letterObj.char}
+            </span>
+          )) || word
         )}
       </span>
       {adjustedIndex < (currentLine + 2) * 10 - 1 && ' '}
     </React.Fragment>
   );
-
+  
+  
+  
   const startTest = () => {
     setStarted(true);
     timerRef.current && timerRef.current.start(); // Start the timer
@@ -60,8 +71,12 @@ function App() {
   };
 
   const restartTest = () => {
+    
     timerRef.current.restart(); // New timer reset
-    inputRef.current.focus(); // Make sure the input field is ready for typing automatically
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+    
     setTypingData([]); // Reset the typing data
     setStarted(false); // Test will be marked as not started
     setCurrentWordIndex(0); // Start from the first word
@@ -73,6 +88,9 @@ function App() {
     setTypedCharCount(0); // Reset the count of total typed characters
     setAccuracy(0); // Reset accuracy
     setCurrentLine(0); // Reset the current line
+    setWordsWithLetterStates([]);
+
+
     // Optionally shuffle the words again if you want a new sequence on each restart
     const newShuffledWords = shuffleArray(words);
     setShuffledWords(newShuffledWords);
@@ -98,26 +116,40 @@ function App() {
     let correctCharsInCurrentInput = 0;
     
     const updatedCurrentWord = currentWord.map((letterObj, index) => {
-        if (index < inputText.length) {
-            if (letterObj.char === inputText[index]) {
-                correctCharsInCurrentInput++;
-            }
-            return {
-                char: letterObj.char,
-                correct: letterObj.char === inputText[index]
-            };
-        }
-        return letterObj;
-    });
+      if (index < inputText.length) {
+          if (letterObj.char === inputText[index]) {
+              correctCharsInCurrentInput++;
+              return { char: letterObj.char, correct: true };
+          }
+          return { char: letterObj.char, correct: false };
+      }
+      return letterObj;
+  });
+ 
 
     setCurrentWord(updatedCurrentWord);
+    setWordsWithLetterStates(prevWords => {
+      const updatedWords = [...prevWords];
+      updatedWords[currentWordIndex] = updatedCurrentWord;
+      return updatedWords;
+    });
+    
 
     if (inputText.endsWith(' ') || currentWordIndex === shuffledWords.length - 1) {
+      for (let i = inputText.length; i < currentWord.length; i++) {
+        updatedCurrentWord[i] = {
+            char: currentWord[i].char,
+            correct: false
+        };
+    }
+    
         // Update total typed chars (excluding space)
         setTypedCharCount(prevCount => prevCount + inputText.trim().length);
 
         // If the current word is typed correctly, then update correctCharCount
         setCorrectCharCount(prevCount => prevCount + correctCharsInCurrentInput);
+        
+    
 
         if (currentWordIndex < shuffledWords.length - 1) {
             setCurrentWordIndex(currentWordIndex + 1);
@@ -135,7 +167,9 @@ function App() {
         } else {
             setFinished(true);
         }
-    }
+    
+  
+}
 };
 
 const renderLine = (lineNum) => (

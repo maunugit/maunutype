@@ -10,7 +10,7 @@ const Results = ({ typingData, wpm, correctCharCount, incorrectCharCount, accura
         <p>WPM: {wpm} </p>
         <p>correct: {correctCharCount}</p>
         <p>incorrect: {incorrectCharCount}</p>
-        <p>accuracy: {accuracy}</p>
+        <p>accuracy: {accuracy}%</p>
         
       </div>
       <div className="wpm-chart-container">

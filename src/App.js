@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import './App.css';
 
 import { shuffleArray, calculateWPM, calculateAccuracy } from './CalculateWPM';
-import words from './Words'; 
+import wordsByLanguage from './Words'; 
 import Results from './Results';
 import Timer from './Timer.js';
 
@@ -15,6 +15,9 @@ function App() {
     typedCharCount: 0
   });
   
+
+  const [currentLanguage, setCurrentLanguage] = useState("english"); // default to English
+
   const [typingData, setTypingData] = useState([]);
   const [currentWord, setCurrentWord] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -22,6 +25,8 @@ function App() {
   
   const [userInput, setUserInput] = useState('');
   const [timeLeft, setTimeLeft] = useState(15);
+  // const [testDuration, setTestDuration] = useState(15); // Default to 15 seconds
+
   const [started, setStarted] = useState(false);
   
   const [finished, setFinished] = useState(false);
@@ -31,7 +36,8 @@ function App() {
   const inputRef = useRef(null)
   const [currentLine, setCurrentLine] = useState(0); // this will track the current line.
   
-  const [shuffledWords, setShuffledWords] = useState(shuffleArray(words));
+  const [shuffledWords, setShuffledWords] = useState(shuffleArray(wordsByLanguage[currentLanguage]));
+
 
 
   const renderWord = (word, adjustedIndex) => (
@@ -70,12 +76,7 @@ function App() {
     }));
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();  // Prevent the default behavior
-      restartTest();          // Restart the test
-    }
-  };
+  
 
   const restartTest = () => {
     
@@ -105,17 +106,26 @@ function App() {
 
 
     // Optionally shuffle the words again if you want a new sequence on each restart
-    const newShuffledWords = shuffleArray(words);
+    const newShuffledWords = shuffleArray(wordsByLanguage[currentLanguage]);
     setShuffledWords(newShuffledWords);
     setCurrentWord(newShuffledWords[0].split("").map(char => ({ char, correct: true })));
   };
-  
+
+  const handleKeyDown = useCallback((event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();  // Prevent the default behavior
+      restartTest();          // Restart the test
+    }
+  }, [restartTest]); // Include all state or props that are used inside handleKeyDown
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [handleKeyDown]);
+  
+
   
 
   const handleInputChange = (event) => {
@@ -200,10 +210,11 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  const newShuffledWords = shuffleArray(words);
+  const newShuffledWords = shuffleArray(wordsByLanguage[currentLanguage]);
   setShuffledWords(newShuffledWords);
   setCurrentWord(newShuffledWords[0].split("").map(char => ({ char, correct: true })));
-}, []);
+}, [currentLanguage]);  // shuffle when the language changes
+
 
 
 useEffect(() => {
@@ -240,6 +251,16 @@ useEffect(() => {
           setFinished(true);
   }}
 />
+
+<div className="LanguageSelector">
+<select value={currentLanguage} onChange={(e) => setCurrentLanguage(e.target.value)}>
+
+    <option value="english">english</option>
+    <option value="finnish">finnish</option>
+    <option value="swedish">swedish</option>
+  </select>
+</div>
+
       
       <div className="Instructions">press tab to restart</div>
       <div className="Words">

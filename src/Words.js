@@ -1,4 +1,4 @@
-const words = [ 
+const englishWords = [ 
     'hello', 'world', 'react', 'too', 'from', 'again', 'javascript', 'typing', 'challenge',
     'developer', 'programming', 'database', 'computer', 'keyboard', 'speed',
     'green', 'operator', 'complete', 'structure', 'brains', 'tree', 'bright', 'brainstorm', 'insight',
@@ -16,9 +16,14 @@ const finnishWords = [
     'kaksi', 'oikea', 'voitto', 'häviö', 'pieni'
   ];
 
-  // const wordsByLanguage = {
-  //   english: englishWords,
-  //   finnish: finnishWords,
-  //   swedish: swedishWords,
-  // };
-export default words;
+  const swedishWords = [ 
+    'hej', 'också', 'kanske', 'dataspel', 'två', 'bygga', 'bil', 'varför', 'universitet',
+    'cykla', 'framtid', 'teknologi'
+  ];
+
+  const wordsByLanguage = {
+    english: englishWords,
+    finnish: finnishWords,
+    swedish: swedishWords,
+  };
+export default wordsByLanguage;

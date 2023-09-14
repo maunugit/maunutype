@@ -9,5 +9,16 @@ const words = [
     'by', 'alliance', 'as', 'for', 'late', 'cry', 'laugh', 'super', 'boy', 'man', 'girl', 'woman'
   ];
 
+const finnishWords = [ 
+    'päivää', 'maailma', 'omena', 'kuin', 'katsoa', 'taivas', 'puu', 'miksi', 'joskus',
+    'taistelu', 'harmillinen', 'kai', 'on', 'yksin', 'viimeinen',
+    'vika', 'loma', 'työ', 'hai', 'koira', 'sininen', 'keltainen', 'viidakko', 'pariskunta',
+    'kaksi', 'oikea', 'voitto', 'häviö', 'pieni'
+  ];
 
+  // const wordsByLanguage = {
+  //   english: englishWords,
+  //   finnish: finnishWords,
+  //   swedish: swedishWords,
+  // };
 export default words;

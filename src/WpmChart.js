@@ -20,7 +20,7 @@ const WpmChart = ({ data }) => {
             domain={[1,15]}
             ticks={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]} 
         />
-        <YAxis label={{ value: ' ', angle: -90, position: 'insideLeft' }} domain={[0, 120]} ticks={[0, 40, 80, 120]} />
+        <YAxis label={{ value: 'WPM', angle: -90, position: 'insideLeft' }} domain={[0, 120]} ticks={[0, 40, 80, 120]} />
         <Tooltip />
         <Line type="monotone" dataKey="wpm" stroke="#8884d8" activeDot={{ r: 8 }} />
       </LineChart>

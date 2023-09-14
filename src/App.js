@@ -8,21 +8,25 @@ import Results from './Results';
 import Timer from './Timer.js';
 
 function App() {
-  const [currentWord, setCurrentWord] = useState([]);
+  const [typingMetrics, setTypingMetrics] = useState({
+    wpm: 0,
+    accuracy: 0,
+    correctCharCount: 0,
+    typedCharCount: 0
+  });
+  
   const [typingData, setTypingData] = useState([]);
+  const [currentWord, setCurrentWord] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-
   const [wordsWithLetterStates, setWordsWithLetterStates] = useState([]);
   
   const [userInput, setUserInput] = useState('');
   const [timeLeft, setTimeLeft] = useState(15);
   const [started, setStarted] = useState(false);
-  const [wpm, setWPM] = useState(0);
+  
   const [finished, setFinished] = useState(false);
   const [startTime, setStartTime] = useState(0);
-  const [correctCharCount, setCorrectCharCount] = useState(0);
-  const [typedCharCount, setTypedCharCount] = useState(0); // New state variable to count total characters typed
-  const [accuracy, setAccuracy] = useState(0);
+  
   const timerRef = useRef(null);
   const inputRef = useRef(null)
   const [currentLine, setCurrentLine] = useState(0); // this will track the current line.
@@ -59,8 +63,11 @@ function App() {
     setStartTime(Date.now());
     setCurrentWordIndex(0);
     setCurrentWord(shuffledWords[0].split("").map(char => ({ char, correct: true })));
-    setCorrectCharCount(0);
-    setTypedCharCount(0);
+    setTypingMetrics(prevMetrics => ({
+      ...prevMetrics,
+      correctCharCount: 0,
+    typedCharCount: 0
+    }));
   };
 
   const handleKeyDown = (event) => {
@@ -82,11 +89,17 @@ function App() {
     setCurrentWordIndex(0); // Start from the first word
     setUserInput(''); // Clear user input
     setTimeLeft(15); // Reset the timer
-    setWPM(0); // Reset Words Per Minute
+    setTypingMetrics(prevMetrics => ({
+      ...prevMetrics,
+      wpm: 0,
+      accuracy: 0,
+      correctCharCount: 0,
+      typedCharCount: 0
+    }));
+    
+    
     setFinished(false); // Mark test as not finished
-    setCorrectCharCount(0); // Reset the count of correctly typed characters
-    setTypedCharCount(0); // Reset the count of total typed characters
-    setAccuracy(0); // Reset accuracy
+     // Reset accuracy
     setCurrentLine(0); // Reset the current line
     setWordsWithLetterStates([]);
 
@@ -142,12 +155,11 @@ function App() {
             correct: false
         };
     }
-    
-        // Update total typed chars (excluding space)
-        setTypedCharCount(prevCount => prevCount + inputText.trim().length);
-
-        // If the current word is typed correctly, then update correctCharCount
-        setCorrectCharCount(prevCount => prevCount + correctCharsInCurrentInput);
+    setTypingMetrics(prevMetrics => ({
+      ...prevMetrics,
+      correctCharCount: prevMetrics.correctCharCount + correctCharsInCurrentInput,
+      typedCharCount: prevMetrics.typedCharCount + inputText.trim().length
+    }));
         
     
 
@@ -196,11 +208,16 @@ useEffect(() => {
 
 useEffect(() => {
   if (timeLeft === 0) {
-    const newWPM = calculateWPM(startTime, correctCharCount);
-    const accuracyValue = calculateAccuracy(correctCharCount, typedCharCount);
+    const newWPM = calculateWPM(startTime, typingMetrics.correctCharCount);
+    const accuracyValue = calculateAccuracy(typingMetrics.correctCharCount, typingMetrics.typedCharCount);
+    setTypingMetrics(prevMetrics => ({
+      ...prevMetrics,
+      wpm: newWPM,
+      accuracy: accuracyValue
+
+    }));
     
-    setWPM(newWPM);
-    setAccuracy(accuracyValue);
+
     setFinished(true);
   }
 }, [timeLeft]);
@@ -214,7 +231,7 @@ useEffect(() => {
         duration={15}
         ref={timerRef}
         onTimeUpdate={(elapsedTime) => {
-          const currentWpm = calculateWPM(startTime, correctCharCount);
+          const currentWpm = calculateWPM(startTime, typingMetrics.correctCharCount);
           console.log("Elapsed Time:", elapsedTime, "WPM:", currentWpm);
           setTypingData(prevData => [...prevData, { seconds: elapsedTime, wpm: currentWpm }]);
         }}
@@ -229,6 +246,7 @@ useEffect(() => {
         {renderLine(currentLine)}
         {renderLine(currentLine + 1)}
     </div>
+    
 
   <div className="UserInputContainer">
     <input
@@ -240,21 +258,25 @@ useEffect(() => {
     onChange={handleInputChange}
     disabled={timeLeft === 0}
     />
+    { <button onClick={restartTest}>↻</button> }
 
     
   </div>
-  {/* { <button onClick={restartTest}>↻</button> } */}
+  
 
   {finished && timeLeft === 0 && (   
   <div className="Result">
     <br />
+    {/* <Results metrics={typingMetrics} /> */}
+
     <Results 
-        typingData={typingData} 
-        wpm={wpm}
-        correctCharCount={correctCharCount}
-        incorrectCharCount={typedCharCount - correctCharCount}
-        accuracy={accuracy}   
-        />
+      typingData={typingData}
+      wpm={typingMetrics.wpm}
+      correctCharCount={typingMetrics.correctCharCount}
+      incorrectCharCount={typingMetrics.typedCharCount - typingMetrics.correctCharCount}
+      accuracy={typingMetrics.accuracy}   
+    />
+
   </div>
    )}
 </div>

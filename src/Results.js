@@ -5,7 +5,7 @@ const Results = ({ typingData, wpm, correctCharCount, incorrectCharCount, accura
   return (
     <div className="results-container">
       <div className="user-typing-results">
-        <h2>Results</h2>
+        <h2>results</h2>
     
         <p>WPM: {wpm} </p>
         <p>correct: {correctCharCount}</p>

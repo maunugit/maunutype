@@ -8,7 +8,8 @@
 }
 
 .Title {
-  font-size: 12px;;
+  font-size: 12px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .incorrect {
   color: red;
@@ -17,16 +18,19 @@
 .TimerDisplay {
   font-size: 22px;
   margin: 10px 0;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 
 .Words {
   font-size: 20px;
   margin: 38px 0;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .CurrentWord {
   text-decoration: underline;
+
 }
 
 .WordsLine {
@@ -51,6 +55,7 @@
 .UserInput {
   width: 200px; 
   font-size: 16px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   padding: 5px;
   margin-bottom: 2px;
   border: 1px solid #ccc; 
@@ -58,14 +63,14 @@
 
 
 button {
-  font-size: 23px;
-  padding: 8px 20px;
+  font-size: 25px;
+  padding: 10px 20px;
   background-color: #fff700;
   color: rgb(0, 0, 0);
   border: none;
   cursor: pointer;
   margin: 0; 
-  line-height: 2; 
+  line-height: 1; 
   vertical-align: middle; 
   box-sizing: border-box; 
 }
@@ -80,7 +85,8 @@ body {
   overflow-x: hidden;
 }
 .results-container {
-  font-size: 50%;
+  font-size: 70%;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   display: flex; 
   justify-content: space-between; 
 }

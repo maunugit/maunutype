@@ -13,7 +13,10 @@ const finnishWords = [
     'päivää', 'maailma', 'omena', 'kuin', 'katsoa', 'taivas', 'puu', 'miksi', 'joskus',
     'taistelu', 'harmillinen', 'kai', 'on', 'yksin', 'viimeinen',
     'vika', 'loma', 'työ', 'hai', 'koira', 'sininen', 'keltainen', 'viidakko', 'pariskunta',
-    'kaksi', 'oikea', 'voitto', 'häviö', 'pieni'
+    'kaksi', 'oikea', 'voitto', 'häviö', 'pieni', 'suuri', 'mieletön', 'talo', 'mökki', 'peli',
+    'vastustaja', 'räjähdys', 'valinnainen', 'paljas', 'runsas', 'rikas', 'köyhä', 'uskomaton',
+    'piha', 'puutarha', 'teräs', 'metalli', 'muovi', 'sylinteri', 'suoja', 'liina', 'haarukka', 'peruna',
+    'veitsi', 'lusikka', 'kulho', 'porras', 'ovi', 'patsas'
   ];
 
   const swedishWords = [ 

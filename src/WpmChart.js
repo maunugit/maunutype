@@ -17,8 +17,8 @@ const WpmChart = ({ data }) => {
         <XAxis
             dataKey="seconds" 
             label={{ value: 'Seconds', position: 'bottom' }} 
-            domain={[1,15]}
-            ticks={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]} 
+            domain={[1,60]}
+            // ticks={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26]} 
         />
         <YAxis label={{ value: 'WPM', angle: -90, position: 'insideLeft' }} domain={[0, 120]} ticks={[0, 40, 80, 120]} />
         <Tooltip />

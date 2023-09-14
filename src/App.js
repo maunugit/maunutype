@@ -25,7 +25,7 @@ function App() {
   
   const [userInput, setUserInput] = useState('');
   const [timeLeft, setTimeLeft] = useState(15);
-  // const [testDuration, setTestDuration] = useState(15); // Default to 15 seconds
+  const [testDuration, setTestDuration] = useState(15); // Default to 15 seconds
 
   const [started, setStarted] = useState(false);
   
@@ -89,7 +89,7 @@ function App() {
     setStarted(false); // Test will be marked as not started
     setCurrentWordIndex(0); // Start from the first word
     setUserInput(''); // Clear user input
-    setTimeLeft(15); // Reset the timer
+    setTimeLeft(testDuration); // Reset the timer
     setTypingMetrics(prevMetrics => ({
       ...prevMetrics,
       wpm: 0,
@@ -233,17 +233,53 @@ useEffect(() => {
   }
 }, [timeLeft]);
 
+
   return (
     <div className="App">
       <div className="Title">
       <h1>MaunuType</h1>
       </div>
+      
+<div>
+      <label htmlFor="testDuration">choose test duration: </label>
+      <select
+        id="testDuration"
+        value={testDuration}
+        onChange={(e) => setTestDuration(Number(e.target.value))}
+        disabled={started}
+      >
+        <option value={10}>10 seconds</option>
+        <option value={15}>15 seconds</option>
+        <option value={30}>30 seconds</option>
+        <option value={45}>45 seconds</option>
+        <option value={60}>60 seconds</option>
+      </select>
+
+      
+      {/* other components and code */}
+    </div>
+
+<div className="LanguageSelector">
+  <label htmlFor="languageSelector">choose a language: </label>
+<select value={currentLanguage} onChange={(e) => setCurrentLanguage(e.target.value)}>
+
+    <option value="english">english</option>
+    <option value="finnish">finnish</option>
+    <option value="swedish">swedish</option>
+  </select>
+  
+</div>
+
+      
+      <div className="Instructions">press tab to restart</div>
+      <div className="TimerDisplay">
       <Timer 
-        duration={15}
+      
+        duration={testDuration}
         ref={timerRef}
         onTimeUpdate={(elapsedTime) => {
           const currentWpm = calculateWPM(startTime, typingMetrics.correctCharCount);
-          console.log("Elapsed Time:", elapsedTime, "WPM:", currentWpm);
+          //console.log("Elapsed Time:", elapsedTime, "WPM:", currentWpm);
           setTypingData(prevData => [...prevData, { seconds: elapsedTime, wpm: currentWpm }]);
         }}
         onTimeEnd={() => {
@@ -251,22 +287,13 @@ useEffect(() => {
           setFinished(true);
   }}
 />
-
-<div className="LanguageSelector">
-<select value={currentLanguage} onChange={(e) => setCurrentLanguage(e.target.value)}>
-
-    <option value="english">english</option>
-    <option value="finnish">finnish</option>
-    <option value="swedish">swedish</option>
-  </select>
 </div>
-
-      
-      <div className="Instructions">press tab to restart</div>
       <div className="Words">
         {renderLine(currentLine)}
         {renderLine(currentLine + 1)}
+        
     </div>
+    
     
 
   <div className="UserInputContainer">
@@ -277,7 +304,7 @@ useEffect(() => {
     // placeholder="Start typing..."
     value={userInput}
     onChange={handleInputChange}
-    disabled={timeLeft === 0}
+    disabled={finished}
     />
     { <button onClick={restartTest}>↻</button> }
 

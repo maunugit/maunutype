@@ -5,28 +5,32 @@
   flex-direction: column;  
   align-items: center;     
   width: 100%;   
-  background-color: #a7a79f;          
+  background-color: #382b25; 
+  min-height: 100vh;           
 }
+
 
 .Title {
   font-size: 12px;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color: #333333;
+  color: #FFD700;
 }
 .incorrect {
   color: red;
 }
 
 .TimerDisplay {
-  font-size: 22px;
+  font-size:22px;
   margin: 10px 0;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-style: inherit;
-  background-color: #FFFF99;
+  background-color: #1d1613;
+  color: #FFD700;
   
 }
 .instructions-container{
-  background-color: #FFFF99;
+  background-color: #1d1613;
+  color: #FFD700;
 }
 
 
@@ -47,6 +51,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #FFD700;
 }
 
 
@@ -59,16 +64,15 @@
   width: 100%;             
 }
 
-
 .UserInput {
   width: 200px; 
   font-size: 16px;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   padding: 5px;
   margin-bottom: 2px;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
+  color: #1d1613; 
 }
-
 
 button {
   font-size: 25px;
@@ -108,8 +112,10 @@ body {
   width: 90%;
 }
 .language-container {
-  background-color: #fff700;
+  background-color: #1d1613;
+  color: #FFD700;
 }
 .test-duration-container {
-  background-color: #fff700;
+  background-color: #1d1613;
+  color: #FFD700;
 }

@@ -75,11 +75,7 @@ function App() {
     typedCharCount: 0
     }));
   };
-
-  
-
   const restartTest = () => {
-    
     timerRef.current.restart(); // New timer reset
     setTimeout(() => {
       inputRef.current.focus();

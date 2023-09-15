@@ -21,12 +21,20 @@ const finnishWords = [
 
   const swedishWords = [ 
     'hej', 'också', 'kanske', 'dataspel', 'två', 'bygga', 'bil', 'varför', 'universitet',
-    'cykla', 'framtid', 'teknologi'
+    'cykla', 'framtid', 'teknologi', 'hund', 'björn', 'kärlek', 'gråta', 'vilja', 'bröd', 'ensam', 'vild',
+    'vår'
+  ];
+  
+  const latinWords = [
+    'felix', 'tristis', 'fortis', 'arbor', 'pulchra', 'canis', 'cattus', 'caelum', 'mare', 'experiri', 'exercitus', 'hasta',
+    'mors', 'vita', 'bibere', 'manducare', 'somnum', 'ursa', 'castrum', 'amare'
+    
   ];
 
   const wordsByLanguage = {
     english: englishWords,
     finnish: finnishWords,
     swedish: swedishWords,
+    latin: latinWords,
   };
 export default wordsByLanguage;

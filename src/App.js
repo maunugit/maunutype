@@ -240,7 +240,7 @@ useEffect(() => {
       <h1>MaunuType</h1>
       </div>
       
-<div>
+  <div className="test-duration-container">
       <label htmlFor="testDuration">choose test duration: </label>
       <select
         id="testDuration"
@@ -255,23 +255,22 @@ useEffect(() => {
         <option value={60}>60 seconds</option>
       </select>
 
-      
-      {/* other components and code */}
-    </div>
+  </div>
 
-<div className="LanguageSelector">
+<div className="language-container">
   <label htmlFor="languageSelector">choose a language: </label>
 <select value={currentLanguage} onChange={(e) => setCurrentLanguage(e.target.value)}>
 
     <option value="english">english</option>
     <option value="finnish">finnish</option>
     <option value="swedish">swedish</option>
+    <option value="latin">latin</option>
   </select>
   
 </div>
 
       
-      <div className="Instructions">press tab to restart</div>
+      <div className="instructions-container">press tab to restart</div>
       <div className="TimerDisplay">
       <Timer 
       

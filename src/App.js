@@ -45,13 +45,16 @@ function App() {
       <span className={adjustedIndex === currentWordIndex ? 'CurrentWord' : ''}>
         {adjustedIndex === currentWordIndex ? (
           currentWord.map((letterObj, charIndex) => (
-            <span key={charIndex} className={letterObj.correct ? '' : 'incorrect'}>
+            <span key={charIndex} 
+                  className={letterObj.correct ? (letterObj.typed ? 'typed' : '') : 'incorrect'}>
               {letterObj.char}
             </span>
-          ))
+        ))
+        
         ) : (
           wordsWithLetterStates[adjustedIndex]?.map((letterObj, charIndex) => (
-            <span key={charIndex} className={letterObj.correct ? '' : 'incorrect'}>
+            <span key={charIndex} 
+                  className={letterObj.correct ? (letterObj.typed ? 'typed' : '') : 'incorrect'}>
               {letterObj.char}
             </span>
           )) || word
@@ -138,29 +141,34 @@ function App() {
       if (index < inputText.length) {
           if (letterObj.char === inputText[index]) {
               correctCharsInCurrentInput++;
-              return { char: letterObj.char, correct: true };
+              return { char: letterObj.char, correct: true, typed: true };
           }
-          return { char: letterObj.char, correct: false };
+          return { char: letterObj.char, correct: false,typed: false };
       }
       return letterObj;
   });
- 
+
 
     setCurrentWord(updatedCurrentWord);
-    setWordsWithLetterStates(prevWords => {
-      const updatedWords = [...prevWords];
-      updatedWords[currentWordIndex] = updatedCurrentWord;
-      return updatedWords;
-    });
+
+    
     
 
     if (inputText.endsWith(' ') || currentWordIndex === shuffledWords.length - 1) {
       for (let i = inputText.length; i < currentWord.length; i++) {
         updatedCurrentWord[i] = {
             char: currentWord[i].char,
-            correct: false
+            correct: false,
+            typed: true
         };
     }
+
+    setWordsWithLetterStates(prevWords => {
+      const updatedWords = [...prevWords];
+      updatedWords[currentWordIndex] = updatedCurrentWord;
+      return updatedWords;
+    });
+    
     setTypingMetrics(prevMetrics => ({
       ...prevMetrics,
       correctCharCount: prevMetrics.correctCharCount + correctCharsInCurrentInput,

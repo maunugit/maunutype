@@ -245,21 +245,13 @@ useEffect(() => {
       </div>
       
   <div className="test-duration-container">
-      <label htmlFor="testDuration">choose test duration: </label>
-      <select
-        id="testDuration"
-        value={testDuration}
-        onChange={(e) => setTestDuration(Number(e.target.value))}
-        disabled={started}
-      >
-        <option value={10}>10 seconds</option>
-        <option value={15}>15 seconds</option>
-        <option value={30}>30 seconds</option>
-        <option value={45}>45 seconds</option>
-        <option value={60}>60 seconds</option>
-      </select>
-
-  </div>
+      <label>choose test length: </label>
+      <button onClick={() => setTestDuration(10)} disabled={started} className="duration-button">10</button>
+    <button onClick={() => setTestDuration(15)} disabled={started} className="duration-button">15</button>
+    <button onClick={() => setTestDuration(30)} disabled={started} className="duration-button">30</button>
+    <button onClick={() => setTestDuration(45)} disabled={started} className="duration-button">45</button>
+    <button onClick={() => setTestDuration(60)} disabled={started} className="duration-button">60</button>
+</div>
 
 <div className="language-container">
   <label htmlFor="languageSelector">choose a language: </label>

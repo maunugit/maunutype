@@ -5,7 +5,7 @@
   flex-direction: column;  
   align-items: center;     
   width: 100%;   
-  background-color: #382b25; 
+  background-color: #604a43; 
   min-height: 100vh;           
 }
 
@@ -15,9 +15,12 @@
 
 
 .Title {
-  font-size: 12px;
+  font-size: 18px;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: #FFD700;
+  margin: 0 auto;  
+  padding: 15px;  
+  border-radius: 20px;  
 }
 .typed {
   color: #dfdfdf;
@@ -27,18 +30,19 @@
 }
 
 .TimerDisplay {
-  background-color: #1d1613;
+  background-color: #2e231e;
+  font-size: 29px;
   color: #FFD700;
-  width: 10%; 
+  width: 30%; 
   margin: 0 auto;  
-  padding: 7px;  
-  border-radius: 10px;  
+  padding: 15px;  
+  border-radius: 20px;  
   
 }
 .instructions-container{
-  background-color: #1d1613;
+  background-color: #2e231e;
   color: #FFD700;
-  width: 10%; 
+  width: 20%; 
   margin: 0 auto; 
   padding: 7px; 
   border-radius: 10px;  
@@ -69,7 +73,7 @@
   height: 25px;
   width: 40px; 
   font-size: 14px;
-  background-color: #fce359;
+  background-color: gold;
   border: none;
   border-radius: 4px;
   margin: 5px;
@@ -79,11 +83,11 @@
 }
 
 .duration-button:hover {
-  background-color: #FFD700;
+  background-color: gold;
 }
 
 .duration-button:disabled {
-  background-color: #fce359 !important;
+  background-color: gold !important;
 }
 
 
@@ -151,17 +155,18 @@ body {
   width: 90%;
 }
 .language-container {
-  background-color: #1d1613;
-  color: #FFD700;
+  background-color: #2e231e;
+  /* #FFD700; */
+  color: gold;
   width: 20%;  
   margin: 0 auto; 
   padding: 7px;  
   border-radius: 10px;  
 }
 .test-duration-container {
-  background-color: #1d1613;
-  color: #FFD700;
-  width: 25%;  
+  background-color: #2e231e;
+  color: gold;
+  width: 30%;  
   margin: 0 auto;  
   padding: 7px;  
   border-radius: 10px;  
@@ -181,3 +186,5 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+/* 
+toimiskohan tää ois tosi kiva jos tää gitti push origin master commit toimis tosi hyvin nytten kiva kiitos */

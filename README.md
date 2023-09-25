@@ -1,9 +1,6 @@
 # MaunuType
 A React-based minimalistic typing test application
 
-![6431d511b05df2d479702c424aafe36a](https://github.com/maunugit/maunutype/assets/142994994/4534a14c-f887-443e-832f-4bfd66d80275)
-
-
 
 # Getting Started with Create React App
 

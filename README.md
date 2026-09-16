@@ -1,6 +1,6 @@
 # MaunuType
 
-The 2026 version of MaunuType: a simple typing test with a white-and-black interface, timed words, and a small collection of quotes to type.
+The 2026 version of MaunuType: a simple typing test with timed words and a small collection of quotes to type.
 
 ![screenshot](image-1.png)
 
@@ -100,6 +100,3 @@ The scaffold's `components/ui` catalog remains unchanged and is excluded from ap
 
 A feature-detected, read-only WebMCP tool, `read_typing_results`, can expose the latest ten result summaries to a supporting browser agent. It cannot type, start tests, or change results. This optional integration has not been exercised in a WebMCP browser context.
 
-## Next feedback pass
-
-The first manual pass should concentrate on caret feel and line transitions on the MacBook and Keychron keyboards, followed by result density and typography. Browser interaction QA, mobile keyboard composition, and assistive-technology testing remain manual validation items. Unit tests verify the scoring contract; they do not establish the subjective typing feel.

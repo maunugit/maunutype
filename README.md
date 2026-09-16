@@ -24,7 +24,15 @@ npm run lint
 npm run build
 ```
 
-The project uses React, TypeScript, Vite, and the scaffold's accessible Base UI/Shadcn primitives. `npm run build` produces static files in `dist/`, with relative asset URLs so the app can live under a website subpath. No runtime API or database is needed by the application. GitHub Pages integration is intentionally left for a later iteration. `npm start` serves the production build locally.
+The project uses React, TypeScript, Vite, and the scaffold's accessible Base UI/Shadcn primitives. `npm run build` produces static files in `dist/`, with relative asset URLs so the app can live under a website subpath. No runtime API or database is needed by the application. `npm start` serves the production build locally.
+
+## Deployment
+
+The live app is hosted at [maunugit.github.io/maunutype](https://maunugit.github.io/maunutype/).
+
+The GitHub Actions workflow in `.github/workflows/pages.yml` deploys every push to `main`. It installs the locked dependencies, runs lint and tests, builds the app (including TypeScript checks), and publishes only `dist/` to GitHub Pages. It can also be run manually from Actions.
+
+Repository Settings → Pages uses **GitHub Actions** as the publishing source. No deployment secrets or separate hosting account are needed. The personal website links to this deployment; its build remains independent.
 
 ## First iteration
 

@@ -2,6 +2,8 @@
 
 The 2026 version of MaunuType: a simple typing test with a white-and-black interface, timed words, and a small collection of quotes to type.
 
+![screenshot](image.png)
+
 The original application from 2023 can be found at [maunutype-2023](https://github.com/maunugit/maunutype-2023).
 
 ## Run locally

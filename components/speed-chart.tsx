@@ -1,4 +1,3 @@
-'use client';
 /* oxlint-disable jsx-a11y/prefer-tag-over-role -- Inline SVG uses an image role for assistive technology. */
 /* oxlint-disable jsx-a11y/no-noninteractive-element-interactions -- Pointer movement only reveals chart values; it does not perform an action. */
 import { useId, useState } from 'react';

@@ -7,8 +7,7 @@
     "oxc",
     "react",
     "import",
-    "jsx-a11y",
-    "nextjs"
+    "jsx-a11y"
   ],
   "categories": {
     "correctness": "error"
@@ -22,17 +21,7 @@
     "typeAware": true,
     "typeCheck": true
   },
-  "ignorePatterns": [
-    ".next/**",
-    ".vinext/**",
-    "out/**",
-    "build/**",
-    "dist/**",
-    "coverage/**",
-    "next-env.d.ts",
-    "components/ui/**",
-    "hooks/use-mobile.ts"
-  ],
+  "ignorePatterns": ["dist/**", "coverage/**", "components/ui/**"],
   "rules": {
     "no-array-constructor": "error",
     "no-var": "error",

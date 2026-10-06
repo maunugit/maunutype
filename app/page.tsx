@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
@@ -602,6 +600,29 @@ export default function Home() {
                     </span>
                     <span className="score-label">accuracy</span>
                   </div>
+                </div>
+                <div className="personal-best">
+                  {result.bestBefore === 0 ? (
+                    <span>
+                      first {result.repeated ? 'repeat' : 'result'}
+                      <strong>baseline</strong>
+                    </span>
+                  ) : result.wpm > result.bestBefore ? (
+                    <>
+                      <span>
+                        new best<strong>{Math.round(result.wpm)}</strong>
+                      </span>
+                      <span>
+                        previous
+                        <strong>{Math.round(result.bestBefore)}</strong>
+                      </span>
+                    </>
+                  ) : (
+                    <span>
+                      personal best
+                      <strong>{Math.round(result.bestBefore)}</strong>
+                    </span>
+                  )}
                 </div>
               </div>
               <SpeedChart samples={result.samples} elapsed={result.elapsed} />

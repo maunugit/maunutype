@@ -1,4 +1,3 @@
-'use client';
 import { memo, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import {
   CARET_GLIDE_MS,

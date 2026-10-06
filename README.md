@@ -24,7 +24,7 @@ npm run lint
 npm run build
 ```
 
-The project uses React, TypeScript, Vite, and the scaffold's accessible Base UI/Shadcn primitives. `npm run build` produces static files in `dist/`, with relative asset URLs so the app can live under a website subpath. No runtime API or database is needed by the application. `npm start` serves the production build locally.
+The project uses React, TypeScript, Vite, and a few accessible Base UI/shadcn primitives. `npm run build` produces static files in `dist/`, with relative asset URLs so the app can live under a website subpath. No runtime API or database is needed by the application. `npm start` serves the production build locally.
 
 ## Deployment
 
@@ -38,10 +38,10 @@ Repository Settings → Pages uses **GitHub Actions** as the publishing source. 
 
 - 15-, 30-, and 60-second word tests in English and Finnish.
 - 26 curated passages from Thoreau, Emerson, McCarthy, Epictetus, and the Dhammapada, filterable by length.
-- Immediate start on the first character, inline feedback, a moving caret, and automatic line following.
+- Immediate start on the first character, inline feedback, a smoothly gliding caret, and automatic line following.
 - WPM and accuracy first, with a cumulative speed chart and error markers.
 - Another test, same-text retry, and expandable character/error details.
-- The last 100 results, all-time personal bests, and preferences stored in this browser.
+- The last 100 results, all-time personal bests (shown on each result), and preferences stored in this browser.
 - White and black default theme, a dark theme, and support for reduced-motion preferences.
 
 ### Keyboard behavior
@@ -97,14 +97,22 @@ Passage records include author, work, section, source URL, language/edition info
 - `lib/typing.ts` — framework-independent scoring, timing, editing, and sampling.
 - `lib/content.ts` — word lists, sourced passages, and test selection.
 - `lib/storage.ts` — validated local preferences, history, and records.
+- `lib/caret-motion.ts` — the caret's glide curve and animation keyframes.
 - `components/typing-surface.tsx` — input handling, letter feedback, and caret placement.
+- `components/ui/` — the Base UI/shadcn primitives in use (button, select, sheet, table, toggle, toggle group).
 - `components/speed-chart.tsx` — responsive SVG speed graph.
 - `app/main.tsx` — browser entry point.
 - `app/page.tsx` — test lifecycle, results, settings, and history.
 - `app/globals.css` — visual language, themes, responsive layout, and motion.
 - `tests/typing.test.mjs` — scoring and timer regression tests.
+- `tests/typing-word.test.mjs` — caret anchoring on rendered letters.
+- `tests/caret-motion.test.mjs` — caret glide and fast-typing retargeting.
 
-The scaffold's `components/ui` catalog remains unchanged and is excluded from application linting; application TypeScript still checks its imported components. `.openai/hosting.json` contains only scaffold/static-output metadata: no registered project or deployed site.
+`components/ui` is excluded from application linting but still type-checked. Add another primitive with `npx shadcn add <name>`.
+
+### Caret motion
+
+The caret glides between letters with the Web Animations API. Each glide starts from the caret's currently drawn position, which is computed from the running animation, so fast typing never makes it jump back. A CSS transition was used before, but Firefox restarted interrupted transitions from a stale position, so the caret snapped backwards on nearly every keystroke at normal typing speed. Line changes, resizing and reduced-motion preferences move the caret instantly.
 
 A feature-detected, read-only WebMCP tool, `read_typing_results`, can expose the latest ten result summaries to a supporting browser agent. It cannot type, start tests, or change results. This optional integration has not been exercised in a WebMCP browser context.
 

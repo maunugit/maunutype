@@ -189,22 +189,6 @@ summary:focus-visible {
   height: 154px;
   overflow: hidden;
 }
-.preview-words {
-  position: relative;
-  color: var(--upcoming);
-  font-family: var(--font-typing);
-  font-size: 29px;
-  line-height: 1.75;
-  letter-spacing: -0.4px;
-}
-.preview-caret {
-  display: inline-block;
-  background: var(--foreground);
-  width: 2px;
-  height: 32px;
-  vertical-align: middle;
-  margin-left: -2px;
-}
 .test-bottom {
   display: flex;
   align-items: center;
@@ -256,9 +240,6 @@ kbd {
   }
   .test-options {
     gap: 3px;
-  }
-  .preview-words {
-    font-size: 24px;
   }
   .site-footer {
     flex-wrap: wrap;

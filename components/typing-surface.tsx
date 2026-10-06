@@ -1,6 +1,20 @@
 'use client';
-import { memo, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useCallback, useLayoutEffect, useRef, useState } from 'react';
+import {
+  CARET_GLIDE_MS,
+  caretAt,
+  caretKeyframes,
+  type Point,
+} from '../lib/caret-motion';
 import type { Session } from '@/lib/typing';
+
+type CaretMotion = {
+  from: Point;
+  to: Point;
+  line: number;
+  glide: Animation | null;
+};
+const translate = ({ x, y }: Point) => `translate(${x}px, ${y}px)`;
 
 export const TypingWord = memo(function TypingWord({
   word,
@@ -70,35 +84,91 @@ export function TypingSurface({
   onRestart: () => void;
 }) {
   const content = useRef<HTMLDivElement>(null);
+  const caret = useRef<HTMLDivElement>(null);
   const composing = useRef(false);
   const [buffer, setBuffer] = useState('');
-  const [position, setPosition] = useState({ x: 0, y: 0, offset: 0, line: 0 });
-  const previousLine = useRef(0);
-  const [lineChanged, setLineChanged] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const motion = useRef<CaretMotion>({
+    from: { x: 0, y: 0 },
+    to: { x: 0, y: 0 },
+    line: -1,
+    glide: null,
+  });
+  const runningRef = useRef(running);
   useLayoutEffect(() => {
-    const update = () => {
-      const text = content.current;
-      const active = text?.querySelector<HTMLElement>('[data-caret="true"]');
-      if (!text || !active) return;
-      const rect = active.getBoundingClientRect(),
-        base = text.getBoundingClientRect();
-      const word = active.closest('.typing-word')!.getBoundingClientRect();
-      const lineHeight = parseFloat(getComputedStyle(text).lineHeight);
-      const top = rect.top - base.top;
-      // The word's line box stays stable at both character and word boundaries.
-      const line = Math.round((word.top - base.top) / lineHeight);
-      const offset = Math.max(0, line - 1) * lineHeight;
-      setLineChanged(previousLine.current !== line);
-      previousLine.current = line;
-      const edge =
-        active.dataset.caretEdge === 'after' ? rect.right : rect.left;
-      setPosition({ x: edge - base.left, y: top - offset, offset, line });
+    runningRef.current = running;
+  }, [running]);
+  const update = useCallback(() => {
+    const text = content.current;
+    const bar = caret.current;
+    const active = text?.querySelector<HTMLElement>('[data-caret="true"]');
+    if (!text || !bar || !active) return;
+    const base = text.getBoundingClientRect();
+    const rect = active.getBoundingClientRect();
+    const word = active.closest('.typing-word')!.getBoundingClientRect();
+    const lineHeight = parseFloat(getComputedStyle(text).lineHeight);
+    const line = Math.round((word.top - base.top) / lineHeight);
+    const target = {
+      x:
+        (active.dataset.caretEdge === 'after' ? rect.right : rect.left) -
+        base.left,
+      y: word.top - base.top,
     };
+    setOffset(Math.max(0, line - 1) * lineHeight);
+
+    const state = motion.current;
+    if (
+      state.line === line &&
+      target.x === state.to.x &&
+      target.y === state.to.y
+    )
+      return;
+    // Start from where the caret is drawn right now, read from the running
+    // glide's own clock rather than from the browser's computed style.
+    const glide = state.glide;
+    const from =
+      glide && glide.playState === 'running'
+        ? caretAt(
+            state.from,
+            state.to,
+            Number(glide.currentTime ?? 0) / CARET_GLIDE_MS,
+          )
+        : state.to;
+    glide?.cancel();
+    state.glide = null;
+    const snap =
+      state.line !== line ||
+      !runningRef.current ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    state.line = line;
+    state.from = from;
+    state.to = target;
+    bar.style.transform = translate(target);
+    if (snap || typeof bar.animate !== 'function') return;
+    state.glide = bar.animate(
+      caretKeyframes(from, target).map((point) => ({
+        transform: translate(point),
+      })),
+      { duration: CARET_GLIDE_MS },
+    );
+  }, []);
+  useLayoutEffect(() => {
     update();
-    const observer = new ResizeObserver(update);
+  }, [update, session.words, session.inputs, session.wordIndex, running]);
+  useLayoutEffect(() => {
+    const observer = new ResizeObserver(() => {
+      // Reflow (resize, font load) moves glyphs: jump, don't glide.
+      motion.current.line = -1;
+      update();
+    });
     if (content.current) observer.observe(content.current);
-    return () => observer.disconnect();
-  }, [session.words, session.inputs, session.wordIndex]);
+    const state = motion.current;
+    return () => {
+      observer.disconnect();
+      state.glide?.cancel();
+      state.glide = null;
+    };
+  }, [update]);
   return (
     <div
       className={`typing-window ${focused ? 'is-focused' : 'is-unfocused'} ${running ? 'is-running' : ''}`}
@@ -106,7 +176,7 @@ export function TypingSurface({
       <div
         ref={content}
         className="typing-content"
-        style={{ transform: `translateY(-${position.offset}px)` }}
+        style={{ transform: `translateY(-${offset}px)` }}
         aria-hidden="true"
       >
         {session.words.map((word, i) => (
@@ -119,12 +189,8 @@ export function TypingSurface({
             last={i === session.words.length - 1}
           />
         ))}
+        <div ref={caret} className="typing-caret" />
       </div>
-      <div
-        className={`typing-caret ${lineChanged ? 'line-change' : ''}`}
-        aria-hidden="true"
-        style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
-      />
       <textarea
         ref={inputRef}
         className="typing-input"

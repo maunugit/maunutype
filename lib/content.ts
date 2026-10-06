@@ -7,7 +7,7 @@ export const wordLists: Record<Language, string[]> = {
   english: [...new Set(english.split(/\s+/))],
   finnish: [...new Set(finnish.split(/\s+/))],
 };
-export function makeWords(language: Language, count = 600): string {
+export function makeWords(language: Language, count = 120): string {
   const list = wordLists[language];
   let previous = '';
   return Array.from({ length: count }, () => {

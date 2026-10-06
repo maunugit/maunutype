@@ -69,6 +69,30 @@ const initialText =
 const timeLabel = (seconds: number) =>
   `${seconds < 10 ? seconds.toFixed(1) : Math.round(seconds)}s`;
 
+// Ticks on its own so the timer re-renders only this number, not the page.
+function TestClock({
+  session,
+  countdown,
+}: {
+  session: Session;
+  countdown: number | null;
+}) {
+  const [now, setNow] = useState(0);
+  const { startedAt, endedAt } = session;
+  useEffect(() => {
+    if (startedAt === null || endedAt !== null) return;
+    const timer = window.setInterval(() => setNow(performance.now()), 100);
+    return () => clearInterval(timer);
+  }, [startedAt, endedAt]);
+  const elapsed =
+    startedAt === null
+      ? 0
+      : Math.max(0, ((endedAt ?? Math.max(now, startedAt)) - startedAt) / 1000);
+  return countdown === null
+    ? Math.floor(elapsed)
+    : Math.max(0, Math.ceil(countdown - elapsed));
+}
+
 export default function Home() {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const settingsRef = useRef(settings);
@@ -83,7 +107,6 @@ export default function Home() {
   const libraryRef = useRef(library);
   const [ready, setReady] = useState(false);
   const [focused, setFocused] = useState(true);
-  const [clock, setClock] = useState(0);
   const [panel, setPanel] = useState<'history' | 'settings' | null>(null);
   const [storageWarning, setStorageWarning] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -91,7 +114,6 @@ export default function Home() {
   const resultsRef = useRef<HTMLDivElement>(null);
   const active =
     session.startedAt !== null && session.endedAt === null && !result;
-  const currentMetrics = metrics(session, clock);
 
   function focusInput() {
     window.setTimeout(
@@ -132,7 +154,6 @@ export default function Home() {
       );
     setRepeated(repeatedRef.current);
     setResult(null);
-    setClock(0);
     setFocused(true);
     focusInput();
   }
@@ -188,22 +209,20 @@ export default function Home() {
       next = enterCharacter(next, char, now, settingsRef.current);
     if (
       settingsRef.current.mode === 'words' &&
-      next.wordIndex > next.words.length - 30
+      next.wordIndex > next.words.length - 40
     )
       next = {
         ...next,
         words: [
           ...next.words,
-          ...makeWords(settingsRef.current.language, 300).split(' '),
+          ...makeWords(settingsRef.current.language, 120).split(' '),
         ],
       };
     commit(next, now);
-    setClock(now);
   }
   function remove(word = false) {
     const now = performance.now();
     commit(erase(sessionRef.current, now, settingsRef.current, word), now);
-    setClock(now);
   }
   function retry(source: Result) {
     settingsRef.current = {
@@ -237,7 +256,6 @@ export default function Home() {
         return;
       const now = performance.now();
       commit(tick(sessionRef.current, now, settingsRef.current), now);
-      setClock(now);
     }, 100);
     return () => clearInterval(timer);
   }, [ready]);
@@ -481,12 +499,12 @@ export default function Home() {
                       : 'Seconds elapsed'
                   }
                 >
-                  {settings.mode === 'words'
-                    ? Math.max(
-                        0,
-                        Math.ceil(settings.duration - currentMetrics.elapsed),
-                      )
-                    : Math.floor(currentMetrics.elapsed)}
+                  <TestClock
+                    session={session}
+                    countdown={
+                      settings.mode === 'words' ? settings.duration : null
+                    }
+                  />
                   <span className="muted">s</span>
                 </span>
               </div>
